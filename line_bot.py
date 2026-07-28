@@ -40,8 +40,12 @@ def home():
 
 @app.route("/callback", methods=["POST"])
 def callback():
+    print("===== CALLBACK HIT =====")
+
     signature = request.headers.get("X-Line-Signature")
     body = request.get_data(as_text=True)
+
+    print(body)
 
     try:
         handler.handle(body, signature)
