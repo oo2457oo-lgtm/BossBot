@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta
+
 from boss_data import BOSS
 from fixed_boss import FIXED_BOSS
 from database import save_boss, late_boss
+
+
+TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 def register_boss(name, kill_time=None):
@@ -9,7 +13,10 @@ def register_boss(name, kill_time=None):
     if name not in BOSS:
         return "沒有這隻首領"
 
+
+    # 有輸入 K 王 HHMM
     if kill_time:
+
         hour = int(kill_time[:2])
         minute = int(kill_time[2:])
 
@@ -19,47 +26,62 @@ def register_boss(name, kill_time=None):
             second=0,
             microsecond=0
         )
+
     else:
+
         now = datetime.now()
 
-    respawn = now + timedelta(hours=BOSS[name])
 
-    # 存入資料庫
-    save_boss(name, respawn.strftime("%Y-%m-%d %H:%M:%S"))
 
-    return f"""
-✅ 登記成功
+    respawn = now + timedelta(
+        hours=BOSS[name]
+    )
 
-{name}
 
-死亡
+    # 登記新的擊殺
+    # database 會自動清除 miss_count
+    save_boss(
+        name,
+        respawn.strftime(TIME_FORMAT)
+    )
 
-{now.strftime("%Y-%m-%d %H:%M:%S")}
 
-重生
+    return (
+        f"✅ {name}　"
+        f"{respawn.strftime('%H%M')}"
+    )
 
-{respawn.strftime("%Y-%m-%d %H:%M:%S")}
-"""
 
 
 def late_register(name):
-    """Boss 輪空，自動往下一個重生時間"""
+
+    """
+    KL 王
+    手動輪空用
+
+    自動輪空主要由 database.py 處理
+    """
 
     if name not in BOSS:
         return "沒有這隻首領"
 
+
     new_respawn = late_boss(name)
 
+
     if new_respawn is None:
-        return "此首領尚未登記"
 
-    return f"""
-⚠ {name} 輪空
+        return (
+            f"⚠ {name}\n"
+            "尚未登記"
+        )
 
-新的重生時間
 
-{new_respawn.strftime("%Y-%m-%d %H:%M:%S")}
-"""
+    return (
+        f"⚠ {name}　"
+        f"{new_respawn.strftime('%H%M')}"
+    )
+
 
 
 def get_fixed_boss():
@@ -68,8 +90,12 @@ def get_fixed_boss():
 
     result = []
 
+
     for boss in FIXED_BOSS:
+
         if today in boss["days"]:
+
             result.append(boss)
+
 
     return result
