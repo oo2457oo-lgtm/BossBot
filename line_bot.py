@@ -19,9 +19,12 @@ from linebot.v3.webhooks import MessageEvent, TextMessageContent
 from linebot.v3.exceptions import InvalidSignatureError
 
 from command import register_boss, late_register
-from database import get_all_boss, clear_all_boss
+from database import init_db, get_all_boss, clear_all_boss
 
 load_dotenv()
+
+# 初始化 SQLite 資料庫
+init_db()
 
 CHANNEL_SECRET = os.getenv("CHANNEL_SECRET")
 CHANNEL_ACCESS_TOKEN = os.getenv("CHANNEL_ACCESS_TOKEN")
