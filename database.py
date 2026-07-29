@@ -290,10 +290,27 @@ def clear_all_boss():
 
     conn.commit()
 
+
+    # 確認清除後剩餘數量
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM boss"
+    )
+
+    count = cursor.fetchone()[0]
+
+
+    print(
+        "AFTER CLEAR COUNT:",
+        count
+    )
+
+
     conn.close()
 
-    print("CLEAR DONE")
-
+    print(
+        "CLEAR DONE"
+    )
 
 
 # =========================
