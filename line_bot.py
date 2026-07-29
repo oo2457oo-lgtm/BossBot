@@ -1,6 +1,7 @@
 import json
 import os
 import scheduler
+print("=== LINE BOT START ===")
 
 from datetime import datetime
 
@@ -21,6 +22,9 @@ from linebot.v3.exceptions import InvalidSignatureError
 from command import register_boss, late_register
 from database import get_all_boss, clear_all_boss
 
+import database
+
+print("DATABASE FILE:", database.__file__)
 
 load_dotenv()
 
