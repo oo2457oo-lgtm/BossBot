@@ -128,10 +128,9 @@ def save_boss(name, respawn_time):
 # =========================
 
 def get_all_boss():
-
-
     print(
-        "READ DATABASE"
+        "READ DATABASE:",
+        DB_NAME
     )
 
 
@@ -276,22 +275,24 @@ def get_all_boss():
 
 def clear_all_boss():
 
+    print(
+        "CLEAR DATABASE:",
+        DB_NAME
+    )
 
     conn = sqlite3.connect(DB_NAME)
 
     cursor = conn.cursor()
 
-
-
     cursor.execute(
         "DELETE FROM boss"
     )
 
-
-
     conn.commit()
 
     conn.close()
+
+    print("CLEAR DONE")
 
 
 
